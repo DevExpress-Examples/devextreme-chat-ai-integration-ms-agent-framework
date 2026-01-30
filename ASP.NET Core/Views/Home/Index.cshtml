@@ -214,7 +214,6 @@
     }
 
     function objectToFormData(obj, form, namespace) {
-        console.log(obj);
         const formData = form || new FormData();
 
         if (obj && typeof obj === 'object' && !(obj instanceof Date) && !(obj instanceof File)) {
@@ -223,7 +222,6 @@
                 const formKey = namespace ? `${namespace}[${key}]` : key;
 
                 if (key === 'attachedFiles') {
-                    //formData.append('attachedFiles', value[0]);
                     value.forEach((file, index) => {
                         formData.append(`files`, value[index]);
                     });
