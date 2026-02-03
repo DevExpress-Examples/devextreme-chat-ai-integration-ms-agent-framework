@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --port 5050",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -26,8 +26,12 @@
     "devextreme": "^25.2.3",
     "devextreme-angular": "^25.2.3",
     "devextreme-dist": "^25.2.3",
+    "rehype-stringify": "^10.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "unified": "^11.0.5",
     "zone.js": "~0.14.7"
   },
   "devDependencies": {

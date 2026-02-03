@@ -1,3 +1,50 @@
-<div class="default-style">
-  <dx-button [text]="buttonText" (onClick)="onClick($event)"></dx-button>
+<div class="demo-container">
+  <dx-chat
+    [class.chat-disabled]="isDisabled"
+    [dataSource]="dataSource"
+    [user]="user"
+    [height]="600"
+    [width]="800"
+    [reloadOnChange]="false"
+    [showAvatar]="false"
+    [showDayHeaders]="false"
+    messageTemplate="messageTemplate"
+    (onMessageEntered)="onMessageEntered($event)"
+    [typingUsers]="(typingUsers$ | async) || []"
+    [alerts]="(alerts$ | async) || []"
+  >
+    <dxo-chat-file-uploader-options
+      [uploadFile]="uploadFile"
+      [onValueChanged]="onFileUploaderValueChanged"
+      uploadedMessage="File attached"
+    ></dxo-chat-file-uploader-options>
+
+    <div *dxTemplate="let data of 'messageTemplate'">
+      <ng-container *ngIf="data.message.text === regenerationText">
+        <span>{{ regenerationText }}</span>
+      </ng-container>
+      <ng-container *ngIf="data.message.text !== regenerationText">
+        <div
+          class="dx-chat-messagebubble-text"
+          [innerHTML]="convertToHtml(data.message)"
+        ></div>
+        <div class="dx-bubble-button-container">
+          <dx-button
+            [icon]="copyButtonIcon"
+            stylingMode="text"
+            hint="Copy"
+            (onClick)="onCopyButtonClick(data.message)"
+          >
+          </dx-button>
+          <dx-button
+            icon="refresh"
+            stylingMode="text"
+            hint="Regenerate"
+            (onClick)="onRegenerateButtonClick()"
+          >
+          </dx-button>
+        </div>
+      </ng-container>
+    </div>
+  </dx-chat>
 </div>
