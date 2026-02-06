@@ -9,6 +9,11 @@
     max-width: 900px;
 }
 
+#chat.dropzone-active {
+  border-style: solid;
+  border-color: var(--dx-color-primary);
+}
+
 .dx-chat-messagelist-empty-image {
     display: none;
 }

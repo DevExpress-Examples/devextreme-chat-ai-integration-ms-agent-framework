@@ -37,12 +37,33 @@ $(() => {
     onMessageEntered,
     onInitialized,
     fileUploaderOptions: {
-      uploadFile: () => {},
+      uploadFile: () => toggleDropZoneActive(document.getElementById('chat'), false),
       onValueChanged: onFileUploaderValueChanged,
       uploadedMessage: 'File attached',
       allowedFileExtensions: ['.jpg', '.jpeg', '.png'],
+      dropZone: '#chat',
+      onDropZoneEnter({ component, dropZoneElement, event }) {
+        if (dropZoneElement.id === 'chat') {
+          const items = event.originalEvent.dataTransfer.items;
+          const allowedFileExtensions = component.option('allowedFileExtensions');
+          const isValidFileExtension = [...items].every(i => allowedFileExtensions.includes(`.${i.type.replace(/^image\//, '')}`));
+
+          if (isValidFileExtension) {
+            toggleDropZoneActive(dropZoneElement, true);
+          }
+        }
+      },
+      onDropZoneLeave({ dropZoneElement}) {
+        if (dropZoneElement.id === 'chat') {
+          toggleDropZoneActive(dropZoneElement, false);
+        }
+      }
     },
   });
+
+  function toggleDropZoneActive(dropZone, isActive) {
+    dropZone.classList.toggle('dropzone-active', isActive);
+  }
 
   function onFileUploaderValueChanged({ value }) {
     attachedFiles = value;
