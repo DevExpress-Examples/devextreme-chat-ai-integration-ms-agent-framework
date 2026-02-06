@@ -3,6 +3,7 @@ using ChatServer.Services;
 using Microsoft.Agents.AI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.AI;
+using System.Text.Json;
 
 namespace ChatServer.Controllers;
 
@@ -45,15 +46,32 @@ public class ChatController : Controller
 
     protected IEnumerable<ClientChatMessage> ToClientMessages(List<ChatMessage> messages) => messages.Select(ToClientMessage);
 
-    protected ClientChatMessage ToClientMessage(ChatMessage m) => new ClientChatMessage
+    protected ClientChatMessage ToClientMessage(ChatMessage m)
     {
-        Author = new ChatAuthor
+        var clientMessage = new ClientChatMessage
         {
-            Id = m.Role.Value,
-            Name = m.Role == ChatRole.User ? "User" : "Virtual Assistant",
-        },
-        Id = m.MessageId,
-        Text = m.Text,
-        Timestamp = m.CreatedAt?.ToUniversalTime().ToString("o")
-    };
+            Author = new ChatAuthor
+            {
+                Id = m.Role.Value,
+                Name = m.Role == ChatRole.User ? "User" : "Virtual Assistant",
+            },
+            Id = m.MessageId,
+            Text = m.Text,
+            Timestamp = m.CreatedAt?.ToUniversalTime().ToString("o")
+        };
+
+        if (m.AdditionalProperties?.TryGetValue("attachments", out var attachmentsValue) == true)
+        {
+            if (attachmentsValue is ChatAttachment[] attachments)
+            {
+                clientMessage.Attachments = attachments;
+            }
+            else if (attachmentsValue is JsonElement jsonElement)
+            {
+                clientMessage.Attachments = jsonElement.Deserialize<ChatAttachment[]>();
+            }
+        }
+
+        return clientMessage;
+    }
 }

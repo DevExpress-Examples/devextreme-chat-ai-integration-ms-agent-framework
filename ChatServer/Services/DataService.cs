@@ -44,6 +44,10 @@ public class DataService
         {
             CreatedAt = message.Timestamp != null ? DateTime.Parse(message.Timestamp) : DateTime.UtcNow,
             MessageId = message.Id,
+            AdditionalProperties = new AdditionalPropertiesDictionary
+            {
+                { "attachments", message.Attachments }
+            },
         };
         return AddMessage(msg);
     }
