@@ -59,7 +59,10 @@ $(() => {
   }
 
   async function getInitialMessages() {
-    const response = await fetch(`${CHAT_SERVER_URL}/GetUserMessages`);
+    const response = await fetch(`${CHAT_SERVER_URL}/GetUserMessages`, {
+      method: 'GET',
+      credentials: 'include',
+    });
     return await response.json();
   }
 
@@ -71,6 +74,7 @@ $(() => {
 
     const response = await fetch(`${CHAT_SERVER_URL}/GetAIResponse?regenerate=${regenerate}`, {
       method: 'POST',
+      credentials: 'include',
       body: formData,
     });
     return await response.json();
