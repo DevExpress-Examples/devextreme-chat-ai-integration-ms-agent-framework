@@ -40,6 +40,7 @@ $(() => {
       uploadFile: () => {},
       onValueChanged: onFileUploaderValueChanged,
       uploadedMessage: 'File attached',
+      allowedFileExtensions: ['.jpg', '.jpeg', '.png'],
     },
   });
 
