@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using ASP.NET_Core.Models;
 using ASP.NET_Core.Services;
@@ -43,13 +44,25 @@ public class ChatController: Controller {
 
     protected IEnumerable<ClientChatMessage> ToClientMessages(List<ChatMessage> messages) => messages.Select(ToClientMessage);
 
-    protected ClientChatMessage ToClientMessage(ChatMessage m) => new ClientChatMessage {
-        Author = new ChatAuthor {
-            Id = m.Role.Value,
-            Name = m.Role == ChatRole.User ? "User" : "Virtual Assistant",
-        },
-        Id = m.MessageId,
-        Text = m.Text,
-        Timestamp = m.CreatedAt?.ToUniversalTime().ToString("o")
-    };
+    protected ClientChatMessage ToClientMessage(ChatMessage m) {
+        var clientMessage = new ClientChatMessage {
+            Author = new ChatAuthor {
+                Id = m.Role.Value,
+                Name = m.Role == ChatRole.User ? "User" : "Virtual Assistant",
+            },
+            Id = m.MessageId,
+            Text = m.Text,
+            Timestamp = m.CreatedAt?.ToUniversalTime().ToString("o")
+        };
+
+        if(m.AdditionalProperties?.TryGetValue("attachments", out var attachmentsValue) == true) {
+            if(attachmentsValue is ChatAttachment[] attachments) {
+                clientMessage.Attachments = attachments;
+            } else if(attachmentsValue is JsonElement jsonElement) {
+                clientMessage.Attachments = jsonElement.Deserialize<ChatAttachment[]>();
+            }
+        }
+
+        return clientMessage;
+    }
 }
