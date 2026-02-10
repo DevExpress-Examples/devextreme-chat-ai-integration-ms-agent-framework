@@ -40,6 +40,10 @@ public class DataService {
         var msg = new ChatMessage(ChatRole.User, contents) {
             CreatedAt = message.Timestamp != null ? DateTime.Parse(message.Timestamp) : DateTime.UtcNow,
             MessageId = message.Id,
+            AdditionalProperties = new AdditionalPropertiesDictionary
+            {
+                { "attachments", message.Attachments }
+            },
         };
         return AddMessage(msg);
     }
