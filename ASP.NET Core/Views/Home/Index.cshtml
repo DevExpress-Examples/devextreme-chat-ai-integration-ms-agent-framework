@@ -19,6 +19,7 @@
         .UploadFile("() => {}")
         .OnValueChanged("onFileUploaderValueChanged")
         .UploadedMessage("File attached")
+        .AllowedFileExtensions(new[] { ".jpg", ".jpeg", ".png" })
     )
 )
 
