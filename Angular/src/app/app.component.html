@@ -1,5 +1,6 @@
 <div class="demo-container">
   <dx-chat
+    id="chat"
     [class.chat-disabled]="isDisabled"
     [dataSource]="dataSource"
     [user]="user"
@@ -18,6 +19,9 @@
       [onValueChanged]="onFileUploaderValueChanged"
       uploadedMessage="File attached"
       [allowedFileExtensions]="allowedFileExtensions"
+      dropZone="#chat"
+      [onDropZoneEnter]="onDropZoneEnter"
+      [onDropZoneLeave]="onDropZoneLeave"
     ></dxo-chat-file-uploader-options>
 
     <div *dxTemplate="let data of 'messageTemplate'">
