@@ -29,6 +29,8 @@ export class AppComponent implements OnInit {
 
   attachedFiles: File[] = [];
 
+  allowedFileExtensions: string[] = ['.jpg', '.jpeg', '.png'];
+
   constructor(private readonly appService: AppService) {
     loadMessages(this.appService.getDictionary());
     this.user = this.appService.user;
