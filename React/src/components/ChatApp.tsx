@@ -7,6 +7,10 @@ import appService from '../ChatService';
 import MessageTemplate from './MessageTemplate.tsx';
 import { CHAT_DISABLED_CLASS, user as chatUser, allowedFileExtensions } from '../data';
 
+function toggleDropZoneActive(dropZone: HTMLElement, isActive: boolean): void {
+  dropZone.classList.toggle('dropzone-active', isActive);
+}
+
 export default function ChatApp(): JSX.Element {
   const user = chatUser;
   const [isDisabled, setDisabled] = useState(false);
@@ -46,7 +50,27 @@ export default function ChatApp(): JSX.Element {
     [onRegenerateButtonClick],
   );
 
-  const uploadFile = useCallback(() => {}, []);
+  const uploadFile = useCallback(() => {
+    toggleDropZoneActive(document.getElementById('chat')!, false)
+  }, []);
+
+  const onDropZoneEnter = useCallback(({ component, dropZoneElement, event }: FileUploaderTypes.DropZoneEnterEvent) => {
+    if (dropZoneElement.id === 'chat') {
+      const items = (event!.originalEvent as DragEvent).dataTransfer?.items ?? [];
+      const allowedFileExtensions = component.option('allowedFileExtensions') ?? [];
+      const isValidFileExtension = Array.from(items).every(i => allowedFileExtensions.includes(`.${i.type.replace(/^image\//, '')}`));
+
+      if (isValidFileExtension) {
+        toggleDropZoneActive(dropZoneElement, true);
+      }
+    }
+  }, []);
+
+  const onDropZoneLeave = useCallback(({ dropZoneElement }: FileUploaderTypes.DropZoneLeaveEvent) => {
+    if (dropZoneElement.id === 'chat') {
+      toggleDropZoneActive(dropZoneElement, false);
+    }
+  }, []);
 
   const onFileUploaderValueChanged = useCallback(({ value }: FileUploaderTypes.ValueChangedEvent) => {
     setAttachedFiles(value ?? []);
@@ -55,6 +79,7 @@ export default function ChatApp(): JSX.Element {
   return (
     <div className="demo-container">
       <Chat
+        id='chat'
         className={isDisabled ? CHAT_DISABLED_CLASS : ''}
         dataSource={chatDS}
         reloadOnChange={false}
@@ -72,6 +97,9 @@ export default function ChatApp(): JSX.Element {
           onValueChanged={onFileUploaderValueChanged}
           uploadedMessage='File attached'
           allowedFileExtensions={allowedFileExtensions}
+          dropZone='#chat'
+          onDropZoneEnter={onDropZoneEnter}
+          onDropZoneLeave={onDropZoneLeave}
         />
       </Chat>
     </div>
