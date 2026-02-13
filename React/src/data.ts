@@ -12,6 +12,8 @@ const user = {
   id: 'user',
 };
 
+const allowedFileExtensions = ['.jpg', '.jpeg', '.png'];
+
 export {
   CHAT_SERVER_URL,
   REGENERATION_TEXT,
@@ -19,4 +21,5 @@ export {
   ALERT_TIMEOUT,
   user,
   assistant,
+  allowedFileExtensions
 };

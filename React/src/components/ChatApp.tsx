@@ -5,7 +5,7 @@ import type { ChatTypes } from 'devextreme-react/chat';
 import type { FileUploaderTypes } from 'devextreme-react/file-uploader';
 import appService from '../ChatService';
 import MessageTemplate from './MessageTemplate.tsx';
-import { CHAT_DISABLED_CLASS, user as chatUser } from '../data';
+import { CHAT_DISABLED_CLASS, user as chatUser, allowedFileExtensions } from '../data';
 
 export default function ChatApp(): JSX.Element {
   const user = chatUser;
@@ -71,6 +71,7 @@ export default function ChatApp(): JSX.Element {
           uploadFile={uploadFile}
           onValueChanged={onFileUploaderValueChanged}
           uploadedMessage='File attached'
+          allowedFileExtensions={allowedFileExtensions}
         />
       </Chat>
     </div>
