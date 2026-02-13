@@ -183,7 +183,7 @@ class AppService {
         const formKey = namespace ? `${namespace}[${key}]` : key;
 
         if (key === 'attachedFiles') {
-          value.forEach((file: any, index: any) => {
+          value.forEach((_: any, index: any) => {
             formData.append('files', value[index]);
           });
         } else if (value instanceof Date) {

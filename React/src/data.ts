@@ -21,5 +21,5 @@ export {
   ALERT_TIMEOUT,
   user,
   assistant,
-  allowedFileExtensions
+  allowedFileExtensions,
 };

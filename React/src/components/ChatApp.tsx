@@ -51,14 +51,13 @@ export default function ChatApp(): JSX.Element {
   );
 
   const uploadFile = useCallback(() => {
-    toggleDropZoneActive(document.getElementById('chat')!, false)
+    toggleDropZoneActive(document.getElementById('chat')!, false);
   }, []);
 
-  const onDropZoneEnter = useCallback(({ component, dropZoneElement, event }: FileUploaderTypes.DropZoneEnterEvent) => {
+  const onDropZoneEnter = useCallback(({ dropZoneElement, event }: FileUploaderTypes.DropZoneEnterEvent) => {
     if (dropZoneElement.id === 'chat') {
       const items = (event!.originalEvent as DragEvent).dataTransfer?.items ?? [];
-      const allowedFileExtensions = component.option('allowedFileExtensions') ?? [];
-      const isValidFileExtension = Array.from(items).every(i => allowedFileExtensions.includes(`.${i.type.replace(/^image\//, '')}`));
+      const isValidFileExtension = Array.from(items).every((i) => allowedFileExtensions.includes(`.${i.type.replace(/^image\//, '')}`));
 
       if (isValidFileExtension) {
         toggleDropZoneActive(dropZoneElement, true);
