@@ -27,6 +27,8 @@ export class AppComponent implements OnInit {
 
   isDisabled = false;
 
+  isDropZoneActive = false;
+
   attachedFiles: File[] = [];
 
   allowedFileExtensions: string[] = ['.jpg', '.jpeg', '.png'];
@@ -54,7 +56,7 @@ export class AppComponent implements OnInit {
   }
 
   uploadFile() {
-    this.toggleDropZoneActive(document.getElementById('chat')!, false);
+    this.isDropZoneActive = false;
   };
 
   onDropZoneEnter({ component, dropZoneElement, event }: DxFileUploaderTypes.DropZoneEnterEvent) {
@@ -64,19 +66,15 @@ export class AppComponent implements OnInit {
       const isValidFileExtension = Array.from(items).every(i => allowedFileExtensions.includes(`.${i.type.replace(/^image\//, '')}`));
 
       if (isValidFileExtension) {
-        this.toggleDropZoneActive(dropZoneElement, true);
+        this.isDropZoneActive = true;
       }
     }
   }
 
   onDropZoneLeave({ dropZoneElement }: DxFileUploaderTypes.DropZoneLeaveEvent) {
     if (dropZoneElement.id === 'chat') {
-      this.toggleDropZoneActive(dropZoneElement, false);
+      this.isDropZoneActive = false;
     }
-  }
-
-  toggleDropZoneActive(dropZone: HTMLElement, isActive: boolean) {
-    dropZone.classList.toggle('dropzone-active', isActive);
   }
 
   convertToHtml(message: DxChatTypes.Message): string {
