@@ -1,11 +1,17 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import {
+  useState, useEffect, useCallback, useMemo,
+} from 'react';
 import { loadMessages } from 'devextreme/localization';
 import Chat, { FileUploaderOptions } from 'devextreme-react/chat';
 import type { ChatTypes } from 'devextreme-react/chat';
 import type { FileUploaderTypes } from 'devextreme-react/file-uploader';
 import appService from '../ChatService';
 import MessageTemplate from './MessageTemplate.tsx';
-import { CHAT_DISABLED_CLASS, CHAT_DROP_ZONE_ACTIVE_CLASS, user as chatUser, allowedFileExtensions } from '../data';
+import {
+  CHAT_DISABLED_CLASS,
+  CHAT_DROP_ZONE_ACTIVE_CLASS,
+  user as chatUser, allowedFileExtensions,
+} from '../data';
 
 export default function ChatApp(): JSX.Element {
   const user = chatUser;
@@ -16,9 +22,7 @@ export default function ChatApp(): JSX.Element {
   const [chatDS, setChatDS] = useState<any>(appService.dataSource);
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
 
-  const chatClassName = useMemo(() => {
-    return `${isDisabled ? CHAT_DISABLED_CLASS : ''} ${isDropZoneActive ? CHAT_DROP_ZONE_ACTIVE_CLASS : ''}`;
-  }, [isDisabled, isDropZoneActive]);
+  const chatClassName = useMemo(() => `${isDisabled ? CHAT_DISABLED_CLASS : ''} ${isDropZoneActive ? CHAT_DROP_ZONE_ACTIVE_CLASS : ''}`, [isDisabled, isDropZoneActive]);
 
   useEffect(() => {
     const typingSubscription = appService.typingUsers$.subscribe(setTypingUsers);
