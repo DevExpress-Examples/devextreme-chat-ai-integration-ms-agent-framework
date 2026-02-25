@@ -4,7 +4,7 @@ For more information about this example check the [Readme](../README.md).
 
 ## Build and Run
 
-Prerequisites: .NET 8 SDK, Node.js (for npm/gulp resource bundling).
+Prerequisites: .NET 10 SDK, Node.js (for npm/gulp resource bundling).
 
 Restore and build:
 ```sh

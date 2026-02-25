@@ -13,7 +13,7 @@ Start dev server:
 ```sh
 npm run dev
 ```
-Open: http://localhost:5173/
+Open: http://localhost:5050/
 
 Build production bundle:
 ```sh
