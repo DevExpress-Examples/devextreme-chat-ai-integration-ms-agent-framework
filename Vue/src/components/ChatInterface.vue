@@ -116,11 +116,6 @@ onMounted(() => {
   display: none;
 }
 
-:deep(.dx-button) {
-  display: inline-block;
-  color: var(--dx-color-icon);
-}
-
 :deep(.dx-chat-messagegroup-alignment-start:last-child .dx-chat-messagebubble:last-child .dx-bubble-button-container) {
   display: flex;
   gap: 4px;
