@@ -1,23 +1,24 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { loadMessages } from 'devextreme/localization';
 import Chat, { FileUploaderOptions } from 'devextreme-react/chat';
 import type { ChatTypes } from 'devextreme-react/chat';
 import type { FileUploaderTypes } from 'devextreme-react/file-uploader';
 import appService from '../ChatService';
 import MessageTemplate from './MessageTemplate.tsx';
-import { CHAT_DISABLED_CLASS, user as chatUser, allowedFileExtensions } from '../data';
-
-function toggleDropZoneActive(dropZone: HTMLElement, isActive: boolean): void {
-  dropZone.classList.toggle('dropzone-active', isActive);
-}
+import { CHAT_DISABLED_CLASS, CHAT_DROP_ZONE_ACTIVE_CLASS, user as chatUser, allowedFileExtensions } from '../data';
 
 export default function ChatApp(): JSX.Element {
   const user = chatUser;
   const [isDisabled, setDisabled] = useState(false);
+  const [isDropZoneActive, toggleDropZoneActive] = useState(false);
   const [typingUsers, setTypingUsers] = useState<ChatTypes.User[]>([]);
   const [alerts, setAlerts] = useState<ChatTypes.Alert[]>([]);
   const [chatDS, setChatDS] = useState<any>(appService.dataSource);
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
+
+  const chatClassName = useMemo(() => {
+    return `${isDisabled ? CHAT_DISABLED_CLASS : ''} ${isDropZoneActive ? CHAT_DROP_ZONE_ACTIVE_CLASS : ''}`;
+  }, [isDisabled, isDropZoneActive]);
 
   useEffect(() => {
     const typingSubscription = appService.typingUsers$.subscribe(setTypingUsers);
@@ -51,7 +52,7 @@ export default function ChatApp(): JSX.Element {
   );
 
   const uploadFile = useCallback(() => {
-    toggleDropZoneActive(document.getElementById('chat')!, false);
+    toggleDropZoneActive(false);
   }, []);
 
   const onDropZoneEnter = useCallback(({ dropZoneElement, event }: FileUploaderTypes.DropZoneEnterEvent) => {
@@ -60,14 +61,14 @@ export default function ChatApp(): JSX.Element {
       const isValidFileExtension = Array.from(items).every((i) => allowedFileExtensions.includes(`.${i.type.replace(/^image\//, '')}`));
 
       if (isValidFileExtension) {
-        toggleDropZoneActive(dropZoneElement, true);
+        toggleDropZoneActive(true);
       }
     }
   }, []);
 
   const onDropZoneLeave = useCallback(({ dropZoneElement }: FileUploaderTypes.DropZoneLeaveEvent) => {
     if (dropZoneElement.id === 'chat') {
-      toggleDropZoneActive(dropZoneElement, false);
+      toggleDropZoneActive(false);
     }
   }, []);
 
@@ -79,7 +80,7 @@ export default function ChatApp(): JSX.Element {
     <div className="demo-container">
       <Chat
         id='chat'
-        className={isDisabled ? CHAT_DISABLED_CLASS : ''}
+        className={chatClassName}
         dataSource={chatDS}
         reloadOnChange={false}
         showAvatar={false}
