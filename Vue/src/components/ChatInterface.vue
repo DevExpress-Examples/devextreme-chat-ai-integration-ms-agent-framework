@@ -1,7 +1,7 @@
 <template>
   <DxChat
     id="chat"
-    :class="{ 'chat-disabled': isDisabled }"
+    :class="{ 'chat-disabled': isDisabled, 'dropzone-active': isDropZoneActive }"
     :data-source="dataSource"
     :user="user"
     :height="600"
@@ -72,6 +72,7 @@ const {
   onCopyButtonClick,
   onRegenerateButtonClick,
   isDisabled,
+  isDropZoneActive,
   uploadFile,
   onFileUploaderValueChanged,
   allowedFileExtensions,

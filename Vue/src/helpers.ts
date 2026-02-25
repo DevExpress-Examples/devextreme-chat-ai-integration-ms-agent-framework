@@ -34,6 +34,7 @@ export function useChatLogic() {
     const regenerationText = ref(REGENERATION_TEXT);
     const copyButtonIcon = ref('copy');
     const isDisabled = ref(false);
+    const isDropZoneActive = ref(false);
     const attachedFiles = ref<File[]>([]);
     const allowedFileExtensions = ref(['.jpg', '.jpeg', '.png']);
 
@@ -51,12 +52,8 @@ export function useChatLogic() {
         attachedFiles.value = e.value ?? [];
     }
 
-    function toggleDropZoneActive(dropZone: HTMLElement, isActive: boolean) {
-        dropZone.classList.toggle('dropzone-active', isActive);
-    }
-
     function uploadFile() {
-        toggleDropZoneActive(document.getElementById('chat')!, false);
+        isDropZoneActive.value = false;
     }
 
     function onDropZoneEnter({ component, dropZoneElement, event }: DxFileUploaderTypes.DropZoneEnterEvent) {
@@ -66,14 +63,14 @@ export function useChatLogic() {
             const isValidFileExtension = Array.from(items).every(i => allowedFileExtensions.includes(`.${i.type.replace(/^image\//, '')}`));
 
             if (isValidFileExtension) {
-                toggleDropZoneActive(dropZoneElement, true);
+                isDropZoneActive.value = true;
             }
         }
     }
 
     function onDropZoneLeave({ dropZoneElement }: DxFileUploaderTypes.DropZoneLeaveEvent) {
         if (dropZoneElement.id === 'chat') {
-            toggleDropZoneActive(dropZoneElement, false);
+            isDropZoneActive.value = false;
         }
     }
 
@@ -277,6 +274,7 @@ export function useChatLogic() {
         onCopyButtonClick,
         onRegenerateButtonClick,
         isDisabled,
+        isDropZoneActive,
         uploadFile,
         onFileUploaderValueChanged,
         allowedFileExtensions,
