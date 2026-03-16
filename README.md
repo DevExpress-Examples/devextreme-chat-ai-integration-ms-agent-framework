@@ -29,9 +29,14 @@ All framework projects share the same implementation.
     - [allowedFileExtensions](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#allowedFileExtensions) limits the allowed file extensions.
     - [dropZone](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#dropZone), [onDropZoneEnter](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#onDropZoneEnter), and [onDropZoneLeave](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#onDropZoneLeave) enable drag-and-drop.
 
-## Run the Server
+## Run the Example
 
-To run the backend, follow the instructions in [ChatServer README](ChatServer/README.md).
+1. Start the server:
+    - Follow the instructions in [ChatServer README](ChatServer/README.md).
+
+2. Start a client app:
+    - For Angular/React/Vue/jQuery, go to the corresponding folder and run `npm install`, then run the project's start script (`npm start` or `npm run dev`).
+    - For ASP.NET Core, go to the ASP.NET Core folder and run the project (`dotnet run` or from Visual Studio). The ASP.NET Core project hosts its own backend, so you do not need to run ChatServer separately.
 
 ## Files to Review
 
