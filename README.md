@@ -12,6 +12,23 @@ This example integrates the [DevExtreme Chat](https://js.devexpress.com/Document
 
 The backend controller ([ChatController.cs](ChatServer/Controllers/ChatController.cs)) handles incoming chat messages, runs a multi-agent workflow (vision analysis, DevExpress documentation lookup using MCP tools, and response editing), and returns the assistant response. Client apps (Angular/React/Vue/jQuery/ASP.NET Core) send user messages to the backend and update the Chat UI with the assistant responses.
 
+## Chat Server
+
+This example includes a preconfigured ASP.NET Web API server (see [ChatServer](/ChatServer/)) that communicates with AI agents built with the [Microsoft Agent Framework](https://github.com/microsoft/agent-framework). The server runs at `http://localhost:5005` and exposes the following endpoints:
+- `/api/Chat/GetAIResponse` (POST)
+- `/api/Chat/GetUserMessages` (GET)
+
+## Configure the Chat Component
+
+All framework projects share the same implementation.
+
+1. Communication with the server is handled in the [onMessageEntered](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onMessageEntered) function. [reloadOnChange](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxChat/Configuration/#reloadOnChange) is disabled, so the handler directly [pushes updates to the store](https://js.devexpress.com/Documentation/Guide/Data_Binding/Data_Layer/#Data_Modification/Integration_with_Push_Services).
+
+2. The [fileUploaderOptions](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxChat/Configuration/#fileUploaderOptions) property configures file upload:
+    - The [uploadFile](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#uploadFile) function is defined, but the example does not upload files to the server. Instead, the handler reads files from [onValueChanged](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#onValueChanged) and caches them.
+    - [allowedFileExtensions](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#allowedFileExtensions) limits the allowed file extensions.
+    - [dropZone](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#dropZone), [onDropZoneEnter](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#onDropZoneEnter), and [onDropZoneLeave](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#onDropZoneLeave) enable drag-and-drop.
+
 ## Run the Server
 
 To run the backend, follow the instructions in [ChatServer README](ChatServer/README.md).
@@ -31,7 +48,7 @@ To run the backend, follow the instructions in [ChatServer README](ChatServer/RE
     - [ChatApp.tsx](React/src/components/ChatApp.tsx)
     - [MessageTemplate.tsx](React/src/components/MessageTemplate.tsx)
     - [ChatService.ts](React/src/ChatService.ts)
-- **ASP.NET Core**    
+- **ASP.NET Core**
     - [Index.cshtml](ASP.NET%20Core/Views/Home/Index.cshtml)
     - [ChatController.cs](ASP.NET%20Core/Controllers/ChatController.cs)
     - [Program.cs](ASP.NET%20Core/Program.cs)
