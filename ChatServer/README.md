@@ -1,12 +1,12 @@
 # ChatServer
 
-ChatServer is a .NET 10 API-only Web API that exposes REST endpoints for sending messages and retrieving chat history. It is powered by the [Microsoft Agent Framework](https://github.com/microsoft/agent-framework) and uses [Azure OpenAI](https://azure.microsoft.com/en-us/pricing/details/azure-openai/) for chat completions.
+ChatServer is an API-only Web API that exposes REST endpoints for sending messages and retrieving chat history. It is powered by the [Microsoft Agent Framework](https://github.com/microsoft/agent-framework) and uses [Azure OpenAI](https://azure.microsoft.com/en-us/pricing/details/azure-openai/) for chat completions.
 
 ## Features
 
 - **API-only architecture** - No Views or static files
 - **Microsoft Agent Framework** - Multi-agent workflow (VisionAgent, SupportAgent, Editor)
-- **Azure OpenAI integration** - Uses `Azure.AI.OpenAI` with `Microsoft.Extensions.AI`
+- **Azure OpenAI integration** - Uses `Azure.AI.OpenAI` alongside with `Microsoft.Extensions.AI`
 - **MCP tools** - Uses DevExpress documentation tools from `https://api.devexpress.com/mcp/docs`
 - **Multipart requests** - Accepts file uploads for vision analysis
 - **Session-based chat history** - Maintains conversation context per session
@@ -29,6 +29,10 @@ ChatServer/
 ├── appsettings.json             # Application settings
 └── ChatServer.csproj            # Project file
 ```
+
+## Prerequisites
+
+- [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 
 ## API Endpoints
 
@@ -106,7 +110,7 @@ The server will start on:
 
 ## CORS Policy
 
-The server allows all HTTP methods and headers for requests coming from `http://localhost:5050`, as configured in `Program.cs` using `WithOrigins("http://localhost:5050")`. This configuration is intended for development purposes: client applications must either be served from `http://localhost:5050` or you must update the CORS policy in `Program.cs` to add or change the allowed origin(s). For production, restrict the allowed origins in `Program.cs` to only the specific domains that should be able to access the API.
+The server allows all HTTP methods and headers for requests from `http://localhost:5050`, as configured in [Program.cs](Program.cs#L105) (`WithOrigins("http://localhost:5050")`). This configuration is intended for development purposes: client applications must communicate with `http://localhost:5050` or you must update the CORS policy in `Program.cs` to change the allowed origin(s). For production, restrict the allowed origins in `Program.cs` to specific domains.
 
 ## Session Management
 
