@@ -80,3 +80,10 @@ All framework projects share the same implementation.
 
 (you will be redirected to DevExpress.com to submit your response)
 <!-- feedback end -->
+<!-- feedback -->
+## Does This Example Address Your Development Requirements/Objectives?
+
+[<img src="https://www.devexpress.com/support/examples/i/yes-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=devextreme-chat-ai-integration-ms-agent-framework&~~~was_helpful=yes) [<img src="https://www.devexpress.com/support/examples/i/no-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=devextreme-chat-ai-integration-ms-agent-framework&~~~was_helpful=no)
+
+(you will be redirected to DevExpress.com to submit your response)
+<!-- feedback end -->
