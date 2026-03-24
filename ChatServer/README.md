@@ -6,7 +6,7 @@ ChatServer is an API-only Web API that exposes REST endpoints for sending messag
 
 - **API-only architecture** - No Views or static files
 - **Microsoft Agent Framework** - Multi-agent workflow (VisionAgent, SupportAgent, Editor)
-- **Azure OpenAI integration** - Uses `Azure.AI.OpenAI` alongside with `Microsoft.Extensions.AI`
+- **Azure OpenAI integration** - Uses `Azure.AI.OpenAI` alongside `Microsoft.Extensions.AI`
 - **MCP tools** - Uses DevExpress documentation tools from `https://api.devexpress.com/mcp/docs`
 - **Multipart requests** - Accepts file uploads for vision analysis
 - **Session-based chat history** - Maintains conversation context per session
@@ -37,7 +37,7 @@ ChatServer/
 ## API Endpoints
 
 ### POST /api/Chat/GetAIResponse
-Sends a message to the agent workflow and returns the assistant response.
+Sends a message to the agent workflow and returns the assistant’s response.
 
 **Request Body (multipart/form-data):**
 
@@ -110,8 +110,8 @@ The server will start on:
 
 ## CORS Policy
 
-The server allows all HTTP methods and headers for requests from `http://localhost:5050`, as configured in [Program.cs](Program.cs#L105) (`WithOrigins("http://localhost:5050")`). This configuration is intended for development purposes: client applications must communicate with `http://localhost:5050` or you must update the CORS policy in `Program.cs` to change the allowed origin(s). For production, restrict the allowed origins in `Program.cs` to specific domains.
+The server allows all HTTP methods and headers for requests from `http://localhost:5050`, as configured in [Program.cs](Program.cs#L105) (`WithOrigins("http://localhost:5050")`).  This configuration is for development purposes only: client applications must communicate with `http://localhost:5050` or you must update the CORS policy in `Program.cs` to change allowed origin(s). For production, restrict allowed origins in `Program.cs` to specific domains.
 
 ## Session Management
 
-Chat history is stored in session storage with a 15-minute idle timeout. Sessions are stored in memory and are automatically cleaned up after the idle timeout expires.
+Chat history is stored in session storage with a 15-minute idle timeout. Sessions are stored in memory and are automatically cleaned up after idle timeout expires.

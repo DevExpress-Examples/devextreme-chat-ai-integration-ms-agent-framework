@@ -6,11 +6,11 @@
 <!-- default badges end -->
 # DevExtreme Chat - AI Integration with Microsoft Agent Framework
 
-This example integrates the [DevExtreme Chat](https://js.devexpress.com/Documentation/Guide/UI_Components/Chat/Overview/) UI component with an AI assistant powered by agents built using the [Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/overview/).
+This example integrates the [DevExtreme Chat](https://js.devexpress.com/Documentation/Guide/UI_Components/Chat/Overview/) UI component with an AI assistant (using agents built with the [Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/overview/)).
 
 ![Example image](images/showcase.png)
 
-The backend controller ([ChatController.cs](ChatServer/Controllers/ChatController.cs)) handles incoming chat messages, runs a multi-agent workflow (vision analysis, DevExpress documentation lookup using MCP tools, and response editing), and returns the assistant response. Client apps (Angular/React/Vue/jQuery/ASP.NET Core) send user messages to the backend and update the Chat UI with the assistant responses.
+The backend controller ([ChatController.cs](ChatServer/Controllers/ChatController.cs)) handles incoming chat messages, runs a multi-agent workflow (vision analysis, DevExpress documentation lookup using MCP tools, and response editing), and returns the assistant’s response. Client apps (Angular/React/Vue/jQuery/ASP.NET Core) send user messages to the backend and update the Chat UI with the assistant’s responses.
 
 ## Chat Server
 
@@ -25,9 +25,9 @@ All framework projects share the same implementation.
 1. Communication with the server is handled in the [onMessageEntered](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onMessageEntered) function. [reloadOnChange](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxChat/Configuration/#reloadOnChange) is disabled, so the handler directly [pushes updates to the store](https://js.devexpress.com/Documentation/Guide/Data_Binding/Data_Layer/#Data_Modification/Integration_with_Push_Services).
 
 2. The [fileUploaderOptions](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxChat/Configuration/#fileUploaderOptions) property configures file upload:
-    - The [uploadFile](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#uploadFile) function enables file uploading in the Chat UI. The [onValueChanged](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#onValueChanged) handler accesses the selected files and caches them manually.
-    - [allowedFileExtensions](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#allowedFileExtensions) limits the allowed file extensions.
-    - [dropZone](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#dropZone), [onDropZoneEnter](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#onDropZoneEnter), and [onDropZoneLeave](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#onDropZoneLeave) enable drag-and-drop.
+    - The [uploadFile](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#uploadFile) function enables file upload operations in the Chat UI. The [onValueChanged](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#onValueChanged) handler accesses the selected files and caches them manually.
+    - [allowedFileExtensions](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#allowedFileExtensions) limits allowed file extensions.
+    - [dropZone](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#dropZone), [onDropZoneEnter](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#onDropZoneEnter), and [onDropZoneLeave](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxFileUploader/Configuration/#onDropZoneLeave) enable drag & drop operations.
 
 ## Run the Example
 
