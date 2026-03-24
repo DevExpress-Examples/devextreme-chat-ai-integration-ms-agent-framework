@@ -1,19 +1,17 @@
 # ChatServer
 
-A .NET 10 Web API project that provides chat endpoints powered by Microsoft Agent Framework.
-
-## Overview
-
-This is an API-only server that handles chat functionality using Azure OpenAI, AI agents, and a workflow that combines vision analysis, DevExpress documentation lookup (via MCP tools), and response editing. While Azure OpenAI is used here, any compatible chat client can be plugged in through the Microsoft Agent Framework. It provides REST endpoints for sending messages and retrieving chat history.
+ChatServer is an API-only Web API that exposes REST endpoints for sending messages and retrieving chat history. It is powered by the [Microsoft Agent Framework](https://github.com/microsoft/agent-framework) and uses [Azure OpenAI](https://azure.microsoft.com/en-us/pricing/details/azure-openai/) for chat completions.
 
 ## Features
 
 - **API-only architecture** - No Views or static files
-- **Microsoft Agent Framework** - Multi-agent workflow (Vision, Support, Editor)
-- **MCP tools** - DevExpress documentation tools from `https://api.devexpress.com/mcp/docs`
+- **Microsoft Agent Framework** - Multi-agent workflow (VisionAgent, SupportAgent, Editor)
+- **Azure OpenAI integration** - Uses `Azure.AI.OpenAI` alongside `Microsoft.Extensions.AI`
+- **MCP tools** - Uses DevExpress documentation tools from `https://api.devexpress.com/mcp/docs`
+- **Multipart requests** - Accepts file uploads for vision analysis
 - **Session-based chat history** - Maintains conversation context per session
 - **CORS enabled** - Allows cross-origin requests from client applications
-- **Port 5005/5006** - Runs on HTTP 5005 and HTTPS 5006
+- **Port 5005** - Runs on HTTP port 5005 and HTTPS port 5006
 
 ## Project Structure
 
@@ -32,10 +30,14 @@ ChatServer/
 └── ChatServer.csproj            # Project file
 ```
 
+## Prerequisites
+
+- [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+
 ## API Endpoints
 
 ### POST /api/Chat/GetAIResponse
-Sends a message to the AI workflow and returns the assistant response.
+Sends a message to the agent workflow and returns the assistant’s response.
 
 **Request Body (multipart/form-data):**
 
@@ -47,7 +49,7 @@ Sends a message to the AI workflow and returns the assistant response.
 
 **Query Parameters:**
 
-- `regenerate` (bool, optional): If true, removes the last message and regenerates response
+- `regenerate` (bool, optional): If true, removes the last message and regenerates the response
 
 **Response:**
 
@@ -96,7 +98,7 @@ Update `appsettings.json` with your Azure OpenAI credentials:
 }
 ```
 
-## Running the Server
+## Run the Server
 
 ```bash
 dotnet run
@@ -108,8 +110,8 @@ The server will start on:
 
 ## CORS Policy
 
-The server allows all requests from `http://localhost:5050` (all methods and headers). Use this configuration for development purposes only. In production, update the CORS policy in `Program.cs` to restrict allowed origins as needed.
+The server allows all HTTP methods and headers for requests from `http://localhost:5050`, as configured in [Program.cs](Program.cs#L105) (`WithOrigins("http://localhost:5050")`).  This configuration is for development purposes only: client applications must communicate with `http://localhost:5050` or you must update the CORS policy in `Program.cs` to change allowed origin(s). For production, restrict allowed origins in `Program.cs` to specific domains.
 
 ## Session Management
 
-Chat history is stored in session storage with a 15-minute idle timeout. Sessions are stored in memory and automatically cleaned up after timeout.
+Chat history is stored in session storage with a 15-minute idle timeout. Sessions are stored in memory and are automatically cleaned up after idle timeout expires.
