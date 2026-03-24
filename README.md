@@ -74,12 +74,6 @@ All framework projects share the same implementation.
 - [Chat with Google Dialogflow](https://github.com/DevExpress-Examples/devextreme-chat-google-dialogflow)
 - [Chat with Azure OpenAI (.NET)](https://github.com/DevExpress-Examples/devextreme-chat-integration-azure-openai-dotnet)
 
-## Does this example address your development requirements/objectives?
-
-[<img src="https://www.devexpress.com/support/examples/i/yes-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=devextreme-chat-ai-integration-ms-agent-framework&~~~was_helpful=yes) [<img src="https://www.devexpress.com/support/examples/i/no-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=devextreme-chat-ai-integration-ms-agent-framework&~~~was_helpful=no)
-
-(you will be redirected to DevExpress.com to submit your response)
-<!-- feedback end -->
 <!-- feedback -->
 ## Does This Example Address Your Development Requirements/Objectives?
 
