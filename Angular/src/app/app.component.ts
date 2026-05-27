@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Observable } from 'rxjs';
 import {type DxChatTypes, DxChatModule} from 'devextreme-angular/ui/chat';
 import { DataSource } from 'devextreme-angular/common/data';
@@ -10,7 +11,7 @@ import { DxButtonModule } from 'devextreme-angular/ui/button';
 
 @Component({
     selector: 'app-root',
-    imports: [DxButtonModule, DxChatModule],
+    imports: [DxButtonModule, DxChatModule, AsyncPipe, NgIf],
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
