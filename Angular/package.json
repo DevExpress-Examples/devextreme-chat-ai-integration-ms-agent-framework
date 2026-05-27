@@ -15,17 +15,16 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^19.2.18",
-    "@angular/common": "^19.2.18",
-    "@angular/compiler": "^19.2.18",
-    "@angular/core": "^19.2.18",
-    "@angular/forms": "^19.2.18",
-    "@angular/platform-browser": "^19.2.18",
-    "@angular/platform-browser-dynamic": "^19.2.18",
-    "@angular/router": "^19.2.18",
+    "@angular/animations": "^21.2.13",
+    "@angular/common": "^21.2.13",
+    "@angular/compiler": "^21.2.13",
+    "@angular/core": "^21.2.13",
+    "@angular/forms": "^21.2.13",
+    "@angular/platform-browser": "^21.2.13",
+    "@angular/platform-browser-dynamic": "^21.2.13",
+    "@angular/router": "^21.2.13",
     "devextreme": "^25.2.3",
     "devextreme-angular": "^25.2.3",
-    "devextreme-dist": "^25.2.3",
     "rehype-stringify": "^10.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
@@ -35,9 +34,8 @@
     "zone.js": "~0.15.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^19.2.21",
-    "@angular/cli": "~19.2.21",
-    "@angular/compiler-cli": "^19.2.18",
+    "@angular/cli": "~21.2.11",
+    "@angular/compiler-cli": "^21.2.13",
     "@types/jasmine": "~4.3.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
@@ -56,7 +54,8 @@
     "stylelint-config-standard": "^33.0.0",
     "stylelint-config-standard-scss": "^9.0.0",
     "stylelint-scss": "^5.0.0",
-    "typescript": "~5.8.3",
-    "typescript-eslint": "^8.49.0"
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.49.0",
+    "@angular/build": "^21.2.11"
   }
 }
