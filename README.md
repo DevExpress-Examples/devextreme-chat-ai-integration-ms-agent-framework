@@ -72,7 +72,7 @@ All framework projects share the same implementation.
 
 - [Chat with OpenAI](https://github.com/DevExpress-Examples/devextreme-chat-openai-integration)
 - [Chat with Google Dialogflow](https://github.com/DevExpress-Examples/devextreme-chat-google-dialogflow)
-- [Chat with Azure OpenAI (.NET)](https://github.com/DevExpress-Examples/devextreme-chat-integration-azure-openai-dotnet)
+- [Chat with Azure OpenAI (.NET)](https://github.com/DevExpress-Examples/devextreme-chat-ai-integration-azure-openai-dotnet)
 
 <!-- feedback -->
 ## Does This Example Address Your Development Requirements/Objectives?

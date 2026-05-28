@@ -32,7 +32,7 @@ ChatServer/
 
 ## Prerequisites
 
-- [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
 
 ## API Endpoints
 
