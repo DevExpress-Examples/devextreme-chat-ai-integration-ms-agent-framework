@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "devextreme": "26.1.2-beta",
-    "devextreme-dist": "26.1.2-beta",
     "devextreme-vue": "26.1.2-beta",
     "html-react-parser": "^5.2.7",
     "rehype-stringify": "^10.0.1",
