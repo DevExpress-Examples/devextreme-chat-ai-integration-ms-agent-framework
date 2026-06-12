@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { Observable } from 'rxjs';
 import {type DxChatTypes, DxChatModule} from 'devextreme-angular/ui/chat';
@@ -13,6 +13,7 @@ import { DxButtonModule } from 'devextreme-angular/ui/button';
     selector: 'app-root',
     imports: [DxButtonModule, DxChatModule, AsyncPipe, NgIf],
     templateUrl: './app.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
