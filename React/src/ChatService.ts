@@ -113,10 +113,10 @@ class AppService {
     }]);
   }
 
-  alertLimitReached(error: any): void {
+  alertError(message: string): void {
     this.setAlerts([
       {
-        message: error.message,
+        message,
       },
     ]);
 
@@ -136,11 +136,15 @@ class AppService {
     try {
       const aiResponse = await this.getAIResponse(lastMessage, true);
       this.updateLastMessage(aiResponse);
-    } catch (error) {
+    } catch (err: any) {
       if (lastMessage) {
         this.updateLastMessage(lastMessage);
       }
-      this.alertLimitReached(error);
+      const errorMessage =
+        err.error?.message ??
+        err.message ??
+        'Unknown error';
+      this.alertError(errorMessage);
     }
   }
 
@@ -164,10 +168,14 @@ class AppService {
         this.typingUsersSubject.next([]);
         this.dataSource?.store().push([{ type: 'insert', data: aiMessage }]);
       }, 500);
-    } catch (err) {
+    } catch (err: any) {
       (event?.target as HTMLElement).focus();
       this.typingUsersSubject.next([]);
-      this.alertLimitReached(err);
+      const errorMessage =
+        err.error?.message ??
+        err.message ??
+        'Unknown error';
+      this.alertError(errorMessage);
     } finally {
       (event?.target as HTMLElement).focus();
       setDisabled(false);

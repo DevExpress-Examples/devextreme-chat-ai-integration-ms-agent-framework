@@ -125,7 +125,11 @@ $(() => {
       }, 200);
     } catch (err) { // eslint-disable-line no-unused-vars
       component.option('typingUsers', []);
-      alertLimitReached(component);
+      const errorMessage =
+        err.error?.message ??
+        err.message ??
+        'Unknown error';
+      alertError(component, errorMessage);
     } finally {
       toggleDisabledState(component, false, event);
     }
@@ -141,9 +145,9 @@ $(() => {
     }
   }
 
-  function alertLimitReached(chat) {
+  function alertError(chat, message) {
     chat.option('alerts', [{
-      message: 'Request limit reached, try again in a minute.',
+      message,
     }]);
 
     setTimeout(() => {
@@ -183,9 +187,13 @@ $(() => {
     try {
       const aiMessage = await getAIResponse(lastMessage, true);
       updateLastMessage(chat, aiMessage);
-    } catch {
+    } catch (err) {
       updateLastMessage(chat, aiMessage);
-      alertLimitReached(chat);
+      const errorMessage =
+        err.error?.message ??
+        err.message ??
+        'Unknown error';
+      alertError(chat, errorMessage);
     } finally {
       toggleDisabledState(chat, false);
     }

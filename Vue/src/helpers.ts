@@ -135,8 +135,8 @@ export function useChatLogic() {
         }]);
     };
 
-    const alertLimitReached = (error: any) => {
-        setAlerts([{ message: error.message }]);
+    const alertError = (error: any) => {
+        setAlerts([{ message }]);
         setTimeout(() => setAlerts([]), ALERT_TIMEOUT);
     };
 
@@ -150,11 +150,15 @@ export function useChatLogic() {
         try {
             const aiResponse = await getAIResponse(lastMessage, true);
             updateLastMessage(aiResponse);
-        } catch (error) {
+        } catch (err) {
             if (lastMessage) {
                 updateLastMessage(lastMessage);
             }
-            alertLimitReached(error);
+            const message =
+                err.error?.message ??
+                err.message ??
+                'Unknown error';
+            alertError(message);
         }
     };
 
@@ -199,10 +203,14 @@ export function useChatLogic() {
                 typingUsers.value = [];
                 dataSource.value?.store().push([{ type: 'insert', data: aiMessage }]);
             }, 500);
-        } catch (err) {
+        } catch (err: any) {
             (event?.target as HTMLElement).focus();
             typingUsers.value = [];
-            alertLimitReached(err);
+            const message =
+                err.error?.message ??
+                err.message ??
+                'Unknown error';
+            alertError(message);
         } finally {
             (event?.target as HTMLElement).focus();
             toggleDisabledState(false);
