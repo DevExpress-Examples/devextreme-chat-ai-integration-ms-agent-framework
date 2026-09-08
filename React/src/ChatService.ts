@@ -140,10 +140,9 @@ class AppService {
       if (lastMessage) {
         this.updateLastMessage(lastMessage);
       }
-      const errorMessage =
-        err.error?.message ??
-        err.message ??
-        'Unknown error';
+      const errorMessage = err.error?.message
+        ?? err.message
+        ?? 'Unknown error';
       this.alertError(errorMessage);
     }
   }
@@ -171,10 +170,9 @@ class AppService {
     } catch (err: any) {
       (event?.target as HTMLElement).focus();
       this.typingUsersSubject.next([]);
-      const errorMessage =
-        err.error?.message ??
-        err.message ??
-        'Unknown error';
+      const errorMessage = err.error?.message
+        ?? err.message
+        ?? 'Unknown error';
       this.alertError(errorMessage);
     } finally {
       (event?.target as HTMLElement).focus();
