@@ -99,13 +99,16 @@ $(() => {
       credentials: 'include',
       body: formData,
     });
+    if (!response.ok) {
+      throw response;
+    }
     return await response.json();
   }
 
   async function onMessageEntered(e) {
     const { component, message, event } = e;
 
-    if (component.option('alerts').length > 0) return;
+    component.option('alerts', []);
 
     message.id = Date.now().toString();
 
@@ -123,13 +126,9 @@ $(() => {
         const dataSource = component.getDataSource();
         dataSource.store().push([{ type: 'insert', data: aiMessage }]);
       }, 200);
-    } catch (err) { // eslint-disable-line no-unused-vars
+    } catch (err) {
       component.option('typingUsers', []);
-      const errorMessage =
-        err.error?.message ??
-        err.message ??
-        'Unknown error';
-      alertError(component, errorMessage);
+      alertError(component, await getErrorMessage(err));
     } finally {
       toggleDisabledState(component, false, event);
     }
@@ -144,6 +143,20 @@ $(() => {
       event?.target.focus();
     }
   }
+
+  async function getErrorMessage(err) {
+    if (err instanceof Response) {
+      let errorText = await err.text();
+      if (!errorText) errorText = err.statusText;
+      return errorText;
+    }
+    if (typeof err === 'object' && err !== null) {
+      if (typeof err.error?.message === 'string') return err.error.message;
+      if (typeof err.message === 'string') return err.message;
+    }
+    if (typeof err === 'string') return err;
+    return 'Unknown error';
+  };
 
   function alertError(chat, message) {
     chat.option('alerts', [{
@@ -188,12 +201,10 @@ $(() => {
       const aiMessage = await getAIResponse(lastMessage, true);
       updateLastMessage(chat, aiMessage);
     } catch (err) {
-      updateLastMessage(chat, aiMessage);
-      const errorMessage =
-        err.error?.message ??
-        err.message ??
-        'Unknown error';
-      alertError(chat, errorMessage);
+      if (lastMessage) {
+        updateLastMessage(chat, lastMessage);
+      }
+      alertError(chat, await getErrorMessage(err));
     } finally {
       toggleDisabledState(chat, false);
     }
