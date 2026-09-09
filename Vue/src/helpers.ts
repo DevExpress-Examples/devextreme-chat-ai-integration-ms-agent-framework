@@ -86,7 +86,7 @@ export function useChatLogic() {
             }
             return await response.json();
         } catch (err: unknown) {
-            const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+            const errorMessage = await getErrorMessage(err);
             notify(`Error fetching initial messages: ${errorMessage}`, 'error', 1000);
             return [];
         }
@@ -106,7 +106,7 @@ export function useChatLogic() {
     };
 
     const getAIResponse = async (message: Message, shouldRegenerate = false) => {
-        const formData = objectToFormData({ ...message, attachedFiles: attachedFiles.value });
+        const formData = objectToFormData({ ...message, attachedFiles: attachedFiles.value || [] });
         const response = await fetch(
             `${CHAT_SERVER_URL}/GetAIResponse?regenerate=${shouldRegenerate}`,
             {
@@ -116,8 +116,7 @@ export function useChatLogic() {
             },
         );
         if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Failed to get AI response ${errorText}`);
+            throw response;
         }
         return response.json();
     };
@@ -135,7 +134,17 @@ export function useChatLogic() {
         }]);
     };
 
-    const alertError = (error: any) => {
+    const getErrorMessage = async (err: unknown): Promise<string> => {
+        if (err instanceof Response) {
+            const errorText = await err.text();
+            return errorText || err.statusText;
+        }
+        if (err instanceof Error) return err.message;
+        if (typeof err === 'string') return err;
+        return 'Unknown error';
+    };
+
+    const alertError = (message: string) => {
         setAlerts([{ message }]);
         setTimeout(() => setAlerts([]), ALERT_TIMEOUT);
     };
@@ -150,15 +159,11 @@ export function useChatLogic() {
         try {
             const aiResponse = await getAIResponse(lastMessage, true);
             updateLastMessage(aiResponse);
-        } catch (err) {
+        } catch (err: unknown) {
             if (lastMessage) {
                 updateLastMessage(lastMessage);
             }
-            const message =
-                err.error?.message ??
-                err.message ??
-                'Unknown error';
-            alertError(message);
+            alertError(await getErrorMessage(err));
         }
     };
 
@@ -188,7 +193,7 @@ export function useChatLogic() {
         let { message, event } = e;
         toggleDisabledState(true);
         (event?.target as HTMLElement).blur();
-        if (alerts.value.length) return;
+        setAlerts([]);
 
         message.id = Date.now().toString();
         if (!message.timestamp) {
@@ -203,14 +208,10 @@ export function useChatLogic() {
                 typingUsers.value = [];
                 dataSource.value?.store().push([{ type: 'insert', data: aiMessage }]);
             }, 500);
-        } catch (err: any) {
+        } catch (err: unknown) {
             (event?.target as HTMLElement).focus();
             typingUsers.value = [];
-            const message =
-                err.error?.message ??
-                err.message ??
-                'Unknown error';
-            alertError(message);
+            alertError(await getErrorMessage(err));
         } finally {
             (event?.target as HTMLElement).focus();
             toggleDisabledState(false);

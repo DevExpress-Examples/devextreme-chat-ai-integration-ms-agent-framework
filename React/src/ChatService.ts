@@ -64,7 +64,7 @@ class AppService {
       }
       return await response.json() as Message[];
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      const errorMessage = await this.getErrorMessage(err);
       notify(`Error fetching initial messages: ${errorMessage}`, 'error', 1000);
       return [];
     }
