@@ -146,17 +146,13 @@ $(() => {
 
   async function getErrorMessage(err) {
     if (err instanceof Response) {
-      let errorText = await err.text();
-      if (!errorText) errorText = err.statusText;
-      return errorText;
+      const errorText = await err.text();
+      return errorText || err.statusText;
     }
-    if (typeof err === 'object' && err !== null) {
-      if (typeof err.error?.message === 'string') return err.error.message;
-      if (typeof err.message === 'string') return err.message;
-    }
+    if (err instanceof Error) return err.message;
     if (typeof err === 'string') return err;
     return 'Unknown error';
-  };
+  }
 
   function alertError(chat, message) {
     chat.option('alerts', [{

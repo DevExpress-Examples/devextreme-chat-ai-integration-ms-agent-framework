@@ -89,13 +89,26 @@
             method: 'POST',
             body: formData,
         });
+        if (!response.ok) {
+            throw response;
+        }
         return await response.json();
+    }
+
+    async function getErrorMessage(err) {
+        if (err instanceof Response) {
+            const errorText = await err.text();
+            return errorText || err.statusText || `Request failed with status ${err.status}`;
+        }
+        if (err instanceof Error) return err.message;
+        if (typeof err === 'string') return err;
+        return 'Unknown error';
     }
 
     async function onMessageEntered(e) {
         const { component, message, event } = e;
 
-        if (component.option('alerts').length > 0) return;
+        component.option('alerts', []);
 
         message.id = Date.now().toString();
 
@@ -115,11 +128,7 @@
             }, 200);
         } catch (err) {
             component.option('typingUsers', []);
-            const message =
-                err.error?.message ??
-                err.message ??
-                'Unknown error';
-            alertError(component, message);
+            alertError(component, await getErrorMessage(err));
         } finally {
             toggleDisabledState(component, false, event);
         }
@@ -176,12 +185,10 @@
             const aiMessage = await getAIResponse(lastMessage, true);
             updateLastMessage(chat, aiMessage);
         } catch (err) {
-            updateLastMessage(chat, aiMessage);
-            const message =
-                err.error?.message ??
-                err.message ??
-                'Unknown error';
-            alertError(chat, message);
+            if (lastMessage) {
+                updateLastMessage(chat, lastMessage);
+            }
+            alertError(chat, await getErrorMessage(err));
         } finally {
             toggleDisabledState(chat, false);
         }
