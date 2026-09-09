@@ -76,7 +76,7 @@ export class AppService {
       }
       return await response.json() as Message[];
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      const errorMessage = await this.getErrorMessage(err);
       notify(`Error fetching initial messages: ${errorMessage}`, 'error', 1000);
       return [];
     }
@@ -111,8 +111,7 @@ export class AppService {
       },
     );
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Failed to get AI response ${errorText}`);
+      throw response;
     }
     return response.json();
   }
@@ -127,6 +126,16 @@ export class AppService {
       type: 'insert',
       data: { ...lastMessage, ...text },
     }]);
+  }
+
+  async getErrorMessage(err: unknown): Promise<string> {
+    if (err instanceof Response) {
+      const errorText = await err.text();
+      return errorText || err.statusText;
+    }
+    if (err instanceof Error) return err.message;
+    if (typeof err === 'string') return err;
+    return 'Unknown error';
   }
 
   alertError(message: string): void {
@@ -152,15 +161,11 @@ export class AppService {
     try {
       const aiResponse = await this.getAIResponse(lastMessage, true);
       this.updateLastMessage(aiResponse);
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (lastMessage) {
         this.updateLastMessage(lastMessage);
       }
-      const errorMessage =
-        err.error?.message ??
-        err.message ??
-        'Unknown error';
-      this.alertError(errorMessage);
+      this.alertError(await this.getErrorMessage(err));
     }
   }
 
@@ -178,7 +183,7 @@ export class AppService {
   async onMessageEntered(e: DxChatTypes.MessageEnteredEvent, attachedFiles?: File[]): Promise<void> {
     let { message, event } = e;
     (event?.target as HTMLElement).blur();
-    if (this.alerts.length) return;
+    this.setAlerts([]);
 
     message.id = Date.now().toString();
     if (!message.timestamp) {
@@ -198,11 +203,7 @@ export class AppService {
     } catch (err: any) {
       (event?.target as HTMLElement).focus();
       this.typingUsersSubject.next([]);
-      const errorMessage =
-        err.error?.message ??
-        err.message ??
-        'Unknown error';
-      this.alertError(errorMessage);
+      this.alertError(await this.getErrorMessage(err));
     } finally {
       (event?.target as HTMLElement).focus();
     }
