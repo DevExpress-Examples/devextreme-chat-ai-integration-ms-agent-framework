@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ASP.NET_Core.Models;
 using ASP.NET_Core.Services;
 using Microsoft.Agents.AI;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,9 @@ public class ChatController: Controller {
             : _dataService.AddUserMessage(message);
 
         var response = await virtualAssistant.RunAsync(messages);
+        if(response.Messages is null || response.Messages.Count == 0) {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, "The AI assistant is unavailable and returned an empty response.");
+        }
         var updatedMessages = _dataService.AddAssistantMessage(response.Messages[^1]);
         var lastMessage = updatedMessages[^1];
 

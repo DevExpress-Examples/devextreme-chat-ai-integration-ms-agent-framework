@@ -64,7 +64,7 @@ class AppService {
       }
       return await response.json() as Message[];
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      const errorMessage = await this.getErrorMessage(err);
       notify(`Error fetching initial messages: ${errorMessage}`, 'error', 1000);
       return [];
     }
@@ -85,7 +85,7 @@ class AppService {
   }
 
   async getAIResponse(message: Message, shouldRegenerate = false, attachedFiles?: File[]): Promise<any> {
-    const formData = this.objectToFormData({ ...message, attachedFiles });
+    const formData = this.objectToFormData({ ...message, attachedFiles: attachedFiles || [] });
     const response = await fetch(
       `${CHAT_SERVER_URL}/GetAIResponse?regenerate=${shouldRegenerate}`,
       {
@@ -95,8 +95,7 @@ class AppService {
       },
     );
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Failed to get AI response ${errorText}`);
+      throw response;
     }
     return response.json();
   }
@@ -113,12 +112,18 @@ class AppService {
     }]);
   }
 
-  alertLimitReached(error: any): void {
-    this.setAlerts([
-      {
-        message: error.message,
-      },
-    ]);
+  async getErrorMessage(err: unknown): Promise<string> {
+    if (err instanceof Response) {
+      const errorText = await err.text();
+      return errorText || err.statusText;
+    }
+    if (err instanceof Error) return err.message;
+    if (typeof err === 'string') return err;
+    return 'Unknown error';
+  }
+
+  alertError(message: string): void {
+    this.setAlerts([{ message }]);
 
     setTimeout((): void => {
       this.setAlerts([]);
@@ -131,24 +136,24 @@ class AppService {
   }
 
   async regenerate(): Promise<void> {
+    this.setAlerts([]);
     let items = this.dataSource?.items();
     let lastMessage = items?.slice(-1)[0];
     try {
       const aiResponse = await this.getAIResponse(lastMessage, true);
       this.updateLastMessage(aiResponse);
-    } catch (error) {
+    } catch (err: unknown) {
       if (lastMessage) {
         this.updateLastMessage(lastMessage);
       }
-      this.alertLimitReached(error);
+      this.alertError(await this.getErrorMessage(err));
     }
   }
 
   async onMessageEntered(e: ChatTypes.MessageEnteredEvent, setDisabled: Function, attachedFiles?: File[]): Promise<void> {
     let { message, event } = e;
     (event?.target as HTMLElement).blur();
-    if (this.alerts.length) return;
-
+    this.setAlerts([]);
     message.id = Date.now().toString();
     if (!message.timestamp) {
       message.timestamp = new Date().toISOString();
@@ -164,10 +169,10 @@ class AppService {
         this.typingUsersSubject.next([]);
         this.dataSource?.store().push([{ type: 'insert', data: aiMessage }]);
       }, 500);
-    } catch (err) {
+    } catch (err: unknown) {
       (event?.target as HTMLElement).focus();
       this.typingUsersSubject.next([]);
-      this.alertLimitReached(err);
+      this.alertError(await this.getErrorMessage(err));
     } finally {
       (event?.target as HTMLElement).focus();
       setDisabled(false);

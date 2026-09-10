@@ -99,13 +99,16 @@ $(() => {
       credentials: 'include',
       body: formData,
     });
+    if (!response.ok) {
+      throw response;
+    }
     return await response.json();
   }
 
   async function onMessageEntered(e) {
     const { component, message, event } = e;
 
-    if (component.option('alerts').length > 0) return;
+    component.option('alerts', []);
 
     message.id = Date.now().toString();
 
@@ -123,9 +126,9 @@ $(() => {
         const dataSource = component.getDataSource();
         dataSource.store().push([{ type: 'insert', data: aiMessage }]);
       }, 200);
-    } catch (err) { // eslint-disable-line no-unused-vars
+    } catch (err) {
       component.option('typingUsers', []);
-      alertLimitReached(component);
+      alertError(component, await getErrorMessage(err));
     } finally {
       toggleDisabledState(component, false, event);
     }
@@ -141,9 +144,19 @@ $(() => {
     }
   }
 
-  function alertLimitReached(chat) {
+  async function getErrorMessage(err) {
+    if (err instanceof Response) {
+      const errorText = await err.text();
+      return errorText || err.statusText;
+    }
+    if (err instanceof Error) return err.message;
+    if (typeof err === 'string') return err;
+    return 'Unknown error';
+  }
+
+  function alertError(chat, message) {
     chat.option('alerts', [{
-      message: 'Request limit reached, try again in a minute.',
+      message,
     }]);
 
     setTimeout(() => {
@@ -183,16 +196,18 @@ $(() => {
     try {
       const aiMessage = await getAIResponse(lastMessage, true);
       updateLastMessage(chat, aiMessage);
-    } catch {
-      updateLastMessage(chat, aiMessage);
-      alertLimitReached(chat);
+    } catch (err) {
+      if (lastMessage) {
+        updateLastMessage(chat, lastMessage);
+      }
+      alertError(chat, await getErrorMessage(err));
     } finally {
       toggleDisabledState(chat, false);
     }
   }
 
   function onRegenerateButtonClick(chat) {
-    if (chat.option('alerts').length > 0) return;
+    chat.option('alerts', []);
 
     updateLastMessage(chat);
     regenerate(chat);
