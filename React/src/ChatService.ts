@@ -123,11 +123,7 @@ class AppService {
   }
 
   alertError(message: string): void {
-    this.setAlerts([
-      {
-        message,
-      },
-    ]);
+    this.setAlerts([{ message }]);
 
     setTimeout((): void => {
       this.setAlerts([]);
