@@ -104,10 +104,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowWeb", policy =>
     {
-        policy.WithOrigins(
-                "http://localhost:5050",
-                "http://localhost:4200"
-            )
+        policy.WithOrigins("http://localhost:5050")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials();

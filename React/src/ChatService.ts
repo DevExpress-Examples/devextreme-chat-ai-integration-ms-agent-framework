@@ -140,6 +140,7 @@ class AppService {
   }
 
   async regenerate(): Promise<void> {
+    this.setAlerts([]);
     let items = this.dataSource?.items();
     let lastMessage = items?.slice(-1)[0];
     try {

@@ -195,7 +195,7 @@
     }
 
     function onRegenerateButtonClick(chat) {
-        if (chat.option('alerts').length > 0) return;
+        chat.option('alerts', []);
 
         updateLastMessage(chat);
         regenerate(chat);

@@ -154,6 +154,7 @@ export function useChatLogic() {
     };
 
     const regenerate = async () => {
+        setAlerts([]);
         let items = dataSource.value?.items();
         let lastMessage = items?.slice(-1)[0];
         try {
